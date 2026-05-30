@@ -42,3 +42,7 @@ else:
 
 add_review(user, 1, 5, "Great product!")
 print("Rating:", get_average_rating(1))
+
+p1 = Product(1, "iPhone", 1200, "Phone", 10, "Electronics", "Apple", True, True, 10)
+
+print(p1)
