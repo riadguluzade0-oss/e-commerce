@@ -7,7 +7,7 @@ def get_trending_products(products):
 
 
 def search_products(products, keyword):
-    return [p for p in products.values() if keyword.lower in p.name.lower()]
+    return [p for p in products.values() if keyword.lower() in p.name.lower()]
 
 
 def filter_by_categories(products, category):
