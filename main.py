@@ -52,91 +52,27 @@ def main():
         users["holland"] = user
     
     cart = Cart()
+    cart.add_item(products[1], 2)
+    cart.add_item(products[2], 1)
 
-    # --- TASK 16: Inventory Checks ---
-    print("\n--- [Task 16] Strict Stock Checks ---")
-    # Attempting to add 25 Puma T-Shirts to Cart (Stock is 20)
-    print(f"Attempting to add 25 '{puma_tshirt.name}' to cart (Stock: {puma_tshirt.stock})...")
-    cart.add_item(puma_tshirt, 25)
-    
-    # Adding items within stock limits
-    print(f"\nAdding items within stock limits...")
-    cart.add_item(products[1], 2) # Nike shoes (Stock: 10)
-    cart.add_item(products[2], 3) # Adidas Hoodie (Stock: 5 -> will trigger low stock alert upon purchase!)
-    
-    print(f"Current cart items (Product ID: Quantity): {cart.items}")
+    print("Cart total:", cart.calculate_total(products))
 
-    # --- TASK 11 (Optional): Promo Code System ---
-    print("\n--- [Task 11] Cart Promo Code System ---")
-    total_before = cart.calculate_total(products)
-    print(f"Cart total before promo code: ${total_before:.2f}")
-    
-    # Apply valid promo code "SAVE10" (10% off)
-    cart.apply_promo_code("SAVE10")
-    total_after = cart.calculate_total(products)
-    print(f"Cart total after 'SAVE10' promo code: ${total_after:.2f}")
+    order = Order(user, cart.items, cart.calculate_total(products))
 
-    # --- TASK 10: Payment & Order Creation ---
-    print("\n--- [Task 10 & 16] Checkout, Payment & Inventory Reduction ---")
-    order = Order(user, cart.items, total_after)
-    
-    # Validate stock before checking out
-    can_checkout = True
-    for pid_str, qty in cart.items.items():
-        pid = int(pid_str)
-        if products[pid].stock < qty:
-            print(f"❌ Checkout failed: '{products[pid].name}' stock has changed and is now insufficient.")
-            can_checkout = False
-            break
+    if order.process_payment():
+        for product_id, qyt in cart.items.items():
+            products[product_id].stock -= qyt
 
-    if can_checkout:
-        # Override process_payment success for deterministic demo flow
-        print("Processing payment...")
-        order.status = 'paid'
-        print(f"Payment successful! Order #{order.id} status is now: {order.status}")
-        
-        # Deduct stock & trigger low-stock alerts if applicable
-        for pid_str, qty in cart.items.items():
-            pid = int(pid_str)
-            products[pid].reduce_stock(qty)
-            
         send_notification("Order confirmed!")
-        orders.append(order)
+        print("Order completed!")
     else:
-        print("Order could not be processed due to stock constraints.")
+        print("Payment failed")
 
-    # --- TASK 10: Delivery Stage Transitions ---
-    print("\n--- [Task 10] Delivery Stage Transitions ---")
-    print(f"Initial delivery status: {order.delivery_status}")
-    
-    # Move through delivery stages
-    print("Transitioning to 'shipped'...")
-    order.update_delivery_status("shipped")
-    
-    print("Transitioning to 'delivered'...")
-    order.update_delivery_status("delivered")
-    
-    print(f"Final order status: {order.status} | Final delivery status: {order.delivery_status}")
-
-    # --- TASK 14: Data Persistence Save ---
-    print("\n--- [Task 14] Persisting Updated State to Storage ---")
-    save_products(products)
-    save_users(users)
-    save_orders(orders)
-    print("Data saved successfully to JSON files.")
-
-    # --- TASK 13: Analytics Dashboard ---
-    print("\n--- [Task 13] Running Analytics Dashboard ---")
-    print_analytics_dashboard(orders, products)
-
-    # Review functionality
-    print("\n--- Leaving a Review ---")
     add_review(user, 1, 5, "Great product!")
-    print("Nike shoes average rating:", get_average_rating(1))
-    
-    print("\n" + "=" * 60)
-    print("        🎉 DEMONSTRATION COMPLETE SUCCESSFULLY! 🎉        ")
-    print("=" * 60)
+    print("Rating:", get_average_rating(1))
+
+    p1 = Product(1, "iPhone", 1200, "Phone", 10, "Electronics", "Apple", True, True, 10)
+    print(p1)
 
 if __name__ == "__main__":
     main()
