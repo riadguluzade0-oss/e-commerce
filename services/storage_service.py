@@ -21,6 +21,7 @@ def save_products(products):
             "id": product.id,
             "name": product.name,
             "price": product.price,
+            "description": getattr(product, "description", ""),
             "stock": product.stock,
             "category": product.category,
             "brand": product.brand,
@@ -55,6 +56,7 @@ def load_products():
             id=pdata["id"],
             name=pdata["name"],
             price=pdata["price"],
+            description=pdata.get("description", ""),
             stock=pdata["stock"],
             category=pdata["category"],
             brand=pdata["brand"]
@@ -64,6 +66,7 @@ def load_products():
         product.discount = pdata.get("discount", 0.0)
         products[pid] = product
     return products
+
 
 def save_users(users):
     ensure_data_dir()

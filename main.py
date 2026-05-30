@@ -61,10 +61,30 @@ def main():
 
     if order.process_payment():
         for product_id, qyt in cart.items.items():
-            products[product_id].stock -= qyt
+            products[product_id].reduce_stock(qyt)
+
+        orders.append(order)
+        
+        # Delivery flow transitions
+        print("\n--- Delivery Stage Transitions ---")
+        print(f"Initial delivery status: {order.delivery_status}")
+        print("Transitioning to 'shipped'...")
+        order.update_delivery_status("shipped")
+        print("Transitioning to 'delivered'...")
+        order.update_delivery_status("delivered")
+        print(f"Final order status: {order.status} | Final delivery status: {order.delivery_status}")
+
+        print("\n--- Persisting Updated State to Storage ---")
+        save_products(products)
+        save_users(users)
+        save_orders(orders)
+        print("Data saved successfully to JSON files.")
 
         send_notification("Order confirmed!")
         print("Order completed!")
+
+        # Analytics Dashboard
+        print_analytics_dashboard(orders, products)
     else:
         print("Payment failed")
 

@@ -23,6 +23,10 @@ class Order:
         return success
 
     def update_delivery_status(self, new_status):
+        if self.status not in ["paid", "completed"]:
+            print(f"❌ Cannot update delivery status for unpaid or failed order #{self.id}.")
+            return False
+            
         valid_statuses = ["pending", "shipped", "delivered"]
         if new_status not in valid_statuses:
             print(f"❌ Invalid delivery status: {new_status}")
