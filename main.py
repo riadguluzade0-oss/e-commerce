@@ -55,8 +55,9 @@ def view_cart(cart, products):
     print("-" * 60)
     for pid, qty in cart.items.items():
         p = products[pid]
+        unit_price_str = f"${p.get_final_price():.2f}"
         subtotal = p.get_final_price() * qty
-        print(f"{p.id:<4} | {p.name:<18} | {qty:<4} | ${p.get_final_price():.2f:<9} | ${subtotal:.2f}")
+        print(f"{p.id:<4} | {p.name:<18} | {qty:<4} | {unit_price_str:<10} | ${subtotal:.2f}")
     
     print("-" * 60)
     total = cart.calculate_total(products)
