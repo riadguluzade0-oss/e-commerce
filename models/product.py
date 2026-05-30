@@ -24,7 +24,8 @@ class Product:
         self.reviews = []
     
     def get_final_price(self):
-        return self.price * (1 - self.discount)
+        discount_fraction = self.discount / 100.0 if self.discount > 1 else self.discount
+        return self.price * (1 - discount_fraction)
 
     def reduce_stock(self, quantity):
         if self.stock < quantity:

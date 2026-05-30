@@ -4,6 +4,10 @@ class Cart:
         self.promo_code = None
 
     def add_item(self, product, quantity):
+        if quantity <= 0:
+            print("❌ Quantity must be greater than zero.")
+            return False
+            
         current_in_cart = self.items.get(product.id, 0)
         new_total_quantity = current_in_cart + quantity
         
