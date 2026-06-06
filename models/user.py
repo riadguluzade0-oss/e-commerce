@@ -5,21 +5,22 @@ class User:
         self.email = email
         self.password = password
         self.favorites = []
-logstat = False
+        self.wishlist = []
+logs = False
 while True :
 
-    if logstat == False:
-        user_chois = input("""1.register?
-        2. lionigng
-        3. nothing.
+    if logs == False:
+        user_chose = input("""1.register?
+        2. log in
+        3. exit
         -
         """)
-        print(user_chois)
+        print(user_chose)
 
-        if user_chois == '1' :
-            username = input("pirnt youre username:")
+        if user_chose == '1' :
+            username = input("print your username:")
             while True :
-                emailRough= input("write youre e.mail:")
+                emailRough= input("write your e.mail:")
                 if "@" and "." in emailRough :
                     print("e.mail")
                     break
@@ -29,48 +30,25 @@ while True :
                 passwordRough = input("last,password:")
                 if len(passwordRough)<7 :
                     print("write 8 or more symbols")
-                elif passwordRough == input("rewrite youre password:"):
-                    print("you registered.")
+                elif passwordRough == input("rewrite your password:"):
+                    print("you are registered.")
                 break
             new_user = User(username = username, password = passwordRough, email = emailRough)
             USer.append(new_user)
-            logstat = True
+            logs = True
 
-        elif user_chois == '2' :
-            usernameWrited = input("write youre username:")
-            passwordWrited = input("write youre password:")
+        elif user_chose == '2' :
+            usernameWrote = input("write your username:")
+            passwordWrote = input("write your password:")
             try:
-                for usernam in User.username:
-                    if usernam.username == usernameWrited and user.password == passwordWrited:
-                        logstat = True
+                for username in User.username:
+                    if username == usernameWrote and User.password == passwordWrote:
+                        logs = True
                         print("you are singed in")
             except ValueError as err:
                 print(err)
 
         else:
             print("bye.")
-            logstat = False
-    else :
-        user_chois = input("""
-        1.add something to wishlist?
-        2.delete something?
-        3.look to a wishlist.
-        3.nouhing
-        -""")
-        if user_chois == '1':
-            wish = input('''what to add?
-            -''')
-            USer[0].favorites.append(wish)
-            print("item added to a wishlist. ")
-        elif user_chois == '2':
-            for ind in range(len(self.user.favorites)):
-                print(str(ind)+ind-1[self.user.favorites])
-
-            uwished = int(input("what to delete?"))-1 
-            self.User.favorites.pop(unwished)
-        elif user_chois == '3':
-            for ind in range(len(self.user.favorites)):
-                print(str(ind)+ind-1[USer.favorites])
-        else :
-            print('bue')
+            logs = False
             break

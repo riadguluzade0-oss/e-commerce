@@ -17,6 +17,7 @@ from services.storage_service import (
 from services.analytics_service import print_analytics_dashboard
 from utils.notifications import send_notification
 
+
 def display_catalog(products):
     print("\n" + "=" * 80)
     print("                      🛍️  CURRENT PRODUCT CATALOG  🛍️")
@@ -240,6 +241,5 @@ def main():
             save_orders(orders)
         except Exception:
             pass
-
 if __name__ == "__main__":
     main()
