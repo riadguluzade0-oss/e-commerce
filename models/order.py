@@ -8,6 +8,7 @@ class Order:
         self.items = items
         self.total = total
         self.status = "pending"
+        self.delivery_status = "pending"
 
     def process_payment(self):
         success = random.choice([True, False])
@@ -20,3 +21,24 @@ class Order:
             print('Payment failed')
 
         return success
+
+    def update_delivery_status(self, new_status):
+        if self.status not in ["paid", "completed"]:
+            print(f"❌ Cannot update delivery status for unpaid or failed order #{self.id}.")
+            return False
+            
+        valid_statuses = ["pending", "shipped", "delivered"]
+        if new_status not in valid_statuses:
+            print(f"❌ Invalid delivery status: {new_status}")
+            return False
+        
+        self.delivery_status = new_status
+        from utils.notifications import send_notification
+        send_notification(f"Order #{self.id} delivery status updated to: {new_status}")
+        
+        # If order reaches delivered, mark overall order status as completed
+        if new_status == "delivered":
+            self.status = "completed"
+            send_notification(f"Order #{self.id} has been successfully completed!")
+        
+        return True

@@ -1,0 +1,38 @@
+{
+    "1": {
+        "id": 1,
+        "name": "Nike shoes",
+        "price": 120,
+        "description": "",
+        "stock": 2,
+        "category": "Shoes",
+        "brand": "Nike",
+        "is_featured": true,
+        "is_trending": false,
+        "discount": 0
+    },
+    "2": {
+        "id": 2,
+        "name": "Adidas Hoodie",
+        "price": 80,
+        "description": "",
+        "stock": 1,
+        "category": "Clothes",
+        "brand": "Adidas",
+        "is_featured": false,
+        "is_trending": true,
+        "discount": 0
+    },
+    "3": {
+        "id": 3,
+        "name": "Puma T-Shirt",
+        "price": 40,
+        "description": "",
+        "stock": 20,
+        "category": "Clothes",
+        "brand": "Puma",
+        "is_featured": false,
+        "is_trending": false,
+        "discount": 0.15
+    }
+}
