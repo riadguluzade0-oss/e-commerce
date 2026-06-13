@@ -1,11 +1,9 @@
-import sys
-from models.product import Product, apply_discount
 from models.user import User
 from models.cart import Cart
 from models.order import Order
 
-from services.product_service import get_featured_products, search_products
 from services.review_service import add_review, get_average_rating
+from services.wishlist_service import add_to_wishlist, show_wishlist
 from services.storage_service import (
     load_products,
     save_products,
@@ -68,6 +66,62 @@ def view_cart(cart, products):
     print("=" * 60 + "\n")
     return True
 
+
+def register_user(users):
+    print("\n" + "=" * 40)
+    print("              👤 REGISTER")
+    print("=" * 40)
+
+    username = input("Choose a username: ").strip()
+    if not username:
+        print("❌ Username cannot be empty.")
+        return None
+
+    if username in users:
+        print(f"❌ Username '{username}' already exists. Please log in with that name.")
+        return users[username]
+
+    email = input("Enter your email: ").strip()
+    if "@" not in email or "." not in email:
+        print("❌ Please enter a valid email address.")
+        return None
+
+    password = input("Create a password (8+ characters): ").strip()
+    if len(password) < 8:
+        print("❌ Password must be at least 8 characters.")
+        return None
+
+    confirm_password = input("Confirm password: ").strip()
+    if password != confirm_password:
+        print("❌ Passwords do not match.")
+        return None
+
+    user = User(username, email, password)
+    users[username] = user
+    save_users(users)
+    print(f"✅ Registered successfully. Welcome, {user.username}!")
+    return user
+
+
+def prompt_for_product(products, prompt):
+    display_catalog(products)
+    pid_input = input(prompt).strip()
+    if not pid_input:
+        return None
+
+    try:
+        pid = int(pid_input)
+    except ValueError:
+        print("❌ Product ID must be an integer.")
+        return None
+
+    product = products.get(pid)
+    if not product:
+        print("❌ Product ID not found in catalog.")
+        return None
+
+    return product
+
 def main():
     try:
         print("=" * 60)
@@ -105,13 +159,21 @@ def main():
             print("4. 💳 Checkout & Process Order")
             print("5. ⭐ Leave a Product Review")
             print("6. 📊 View Store Analytics Dashboard")
-            print("7. 🚪 Save and Exit")
+            print("7. 👤 Register New User")
+            print("8. ❤️  Add Product to Wishlist")
+            print("9. ❤️  View Wishlist")
+            print("10. 🚪 Save and Exit")
             print("—" * 50)
             
-            choice = input("Select an option (1-7): ").strip()
+            choice = input("Select an option (1-10): ").strip()
             
             if choice == "1":
                 display_catalog(products)
+                wishlist_choice = input("Would you like to add a product to your wishlist? (y/n): ").strip().lower()
+                if wishlist_choice == "y":
+                    product = prompt_for_product(products, "Enter the Product ID to add to wishlist: ")
+                    if product and add_to_wishlist(user, product):
+                        save_users(users)
                 
             elif choice == "2":
                 display_catalog(products)
@@ -133,6 +195,9 @@ def main():
                     # Try adding to cart
                     if cart.add_item(products[pid], qty):
                         print(f"✅ Added {qty}x '{products[pid].name}' to your cart.")
+                        wishlist_choice = input("Would you also like to add it to your wishlist? (y/n): ").strip().lower()
+                        if wishlist_choice == "y" and add_to_wishlist(user, products[pid]):
+                            save_users(users)
                 except ValueError:
                     print("❌ Invalid input. Please enter valid integer values.")
                     
@@ -225,6 +290,21 @@ def main():
                 print_analytics_dashboard(orders, products)
                 
             elif choice == "7":
+                registered_user = register_user(users)
+                if registered_user:
+                    user = registered_user
+                    cart = Cart()
+                    print(f"👋 You are now shopping as {user.username}.")
+                
+            elif choice == "8":
+                product = prompt_for_product(products, "Enter the Product ID to add to wishlist: ")
+                if product and add_to_wishlist(user, product):
+                    save_users(users)
+                    
+            elif choice == "9":
+                show_wishlist(user, products)
+                
+            elif choice == "10":
                 print("\n💾 Saving session details...")
                 save_products(products)
                 save_users(users)
@@ -232,7 +312,7 @@ def main():
                 print("👋 Thank you for shopping with us! Goodbye!")
                 break
             else:
-                print("❌ Invalid option. Please enter a number between 1 and 7.")
+                print("❌ Invalid option. Please enter a number between 1 and 10.")
     except (KeyboardInterrupt, EOFError):
         print("\n\n👋 Program interrupted. Saving session and exiting gracefully... Goodbye!")
         try:

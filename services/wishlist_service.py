@@ -11,6 +11,10 @@ def add_to_wishlist(user, product):
 
 def show_wishlist(user, products=None):
     print("Wishlist:")
+    if not user.wishlist:
+        print("Your wishlist is empty.")
+        return
+
     for product_id in user.wishlist:
         product = products.get(product_id) if products else None
         print(product if product else product_id)

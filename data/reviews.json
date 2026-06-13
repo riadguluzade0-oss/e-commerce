@@ -4,5 +4,11 @@
         "product_id": 1,
         "rating": 5,
         "comment": "Very good"
+    },
+    {
+        "user": "holland",
+        "product_id": 1,
+        "rating": 5,
+        "comment": "good"
     }
 ]

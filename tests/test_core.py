@@ -1,7 +1,9 @@
 import os
 import tempfile
 import unittest
+from unittest.mock import patch
 
+from main import register_user
 from models.cart import Cart
 from models.product import Product
 from models.user import User
@@ -69,6 +71,29 @@ class StorageTests(unittest.TestCase):
 
                 self.assertEqual(loaded["alice"].favorites, [2])
                 self.assertEqual(loaded["alice"].wishlist, [1])
+            finally:
+                storage_service.DATA_DIR = old_data_dir
+                storage_service.USERS_FILE = old_users_file
+
+    def test_register_user_creates_and_persists_new_user(self):
+        from services import storage_service
+
+        old_data_dir = storage_service.DATA_DIR
+        old_users_file = storage_service.USERS_FILE
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            storage_service.DATA_DIR = tmpdir
+            storage_service.USERS_FILE = os.path.join(tmpdir, "users.json")
+            try:
+                users = {}
+                answers = ["alice", "alice@example.com", "password123", "password123"]
+
+                with patch("builtins.input", side_effect=answers):
+                    user = register_user(users)
+
+                self.assertEqual(user.username, "alice")
+                self.assertIn("alice", users)
+                self.assertEqual(storage_service.load_users()["alice"].email, "alice@example.com")
             finally:
                 storage_service.DATA_DIR = old_data_dir
                 storage_service.USERS_FILE = old_users_file
