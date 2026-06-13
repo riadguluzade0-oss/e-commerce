@@ -13,6 +13,16 @@ def ensure_data_dir():
     if not os.path.exists(DATA_DIR):
         os.makedirs(DATA_DIR)
 
+
+def _read_json_file(path, default):
+    if not os.path.exists(path):
+        return default
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return default
+
 def save_products(products):
     ensure_data_dir()
     data = {}
@@ -46,8 +56,9 @@ def load_products():
         save_products(default_products)
         return default_products
 
-    with open(PRODUCTS_FILE, "r") as f:
-        data = json.load(f)
+    data = _read_json_file(PRODUCTS_FILE, {})
+    if not isinstance(data, dict):
+        return {}
     
     products = {}
     for pid_str, pdata in data.items():
@@ -76,7 +87,8 @@ def save_users(users):
             "username": user.username,
             "email": user.email,
             "password": user.password,
-            "favorites": getattr(user, "favorites", [])
+            "favorites": getattr(user, "favorites", []),
+            "wishlist": getattr(user, "wishlist", [])
         }
     with open(USERS_FILE, "w") as f:
         json.dump(data, f, indent=4)
@@ -91,8 +103,9 @@ def load_users():
         save_users(default_users)
         return default_users
 
-    with open(USERS_FILE, "r") as f:
-        data = json.load(f)
+    data = _read_json_file(USERS_FILE, {})
+    if not isinstance(data, dict):
+        return {}
     
     users = {}
     for username, udata in data.items():
@@ -102,6 +115,7 @@ def load_users():
             password=udata["password"]
         )
         user.favorites = udata.get("favorites", [])
+        user.wishlist = udata.get("wishlist", [])
         users[username] = user
     return users
 
@@ -125,8 +139,9 @@ def load_orders(users):
     if not os.path.exists(ORDERS_FILE):
         return []
 
-    with open(ORDERS_FILE, "r") as f:
-        data = json.load(f)
+    data = _read_json_file(ORDERS_FILE, [])
+    if not isinstance(data, list):
+        return []
     
     orders = []
     for odata in data:

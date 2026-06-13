@@ -3,18 +3,14 @@
         "username": "holland",
         "email": "holland@mail.com",
         "password": "12345678",
-        "favorites": []
+        "favorites": [],
+        "wishlist": []
     },
     "clear": {
         "username": "clear",
         "email": "clear@mail.com",
         "password": "12345678",
-        "favorites": []
-    },
-    "python3 -u \"/Users/alpargozalov/Desktop/e-commerce/main.py\"": {
-        "username": "python3 -u \"/Users/alpargozalov/Desktop/e-commerce/main.py\"",
-        "email": "python3 -u \"/Users/alpargozalov/Desktop/e-commerce/main.py\"@mail.com",
-        "password": "12345678",
-        "favorites": []
+        "favorites": [],
+        "wishlist": []
     }
 }

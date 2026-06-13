@@ -40,15 +40,5 @@
         "total": 320,
         "status": "completed",
         "delivery_status": "delivered"
-    },
-    {
-        "id": 3161,
-        "user_username": "python3 -u \"/Users/alpargozalov/Desktop/e-commerce/main.py\"",
-        "items": {
-            "1": 2
-        },
-        "total": 240,
-        "status": "completed",
-        "delivery_status": "delivered"
     }
 ]

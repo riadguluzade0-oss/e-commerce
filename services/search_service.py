@@ -1,4 +1,7 @@
 def advanced_search(products, keyword=None):
+    if isinstance(products, dict):
+        products = products.values()
+
     result = []
 
     for p in products:
