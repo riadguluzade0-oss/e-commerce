@@ -4,5 +4,11 @@
         "product_id": 1,
         "rating": 5,
         "comment": "Very good"
+    },
+    {
+        "user": "python3 -u \"/Users/alpargozalov/Desktop/e-commerce/main.py\"",
+        "product_id": 3,
+        "rating": 5,
+        "comment": "great"
     }
 ]

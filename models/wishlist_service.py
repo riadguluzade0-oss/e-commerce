@@ -20,9 +20,3 @@ def handle_buy_or_wishlist(user, product):
         add_to_wishlist(user, product)
     else:
         print("Continuing...")
-
-
-user = User("alpar", "test@gmail.com", "123456")
-product = Product(1, "iPhone", 1200, "Phone", 10, "Electronics", "Apple")
-
-handle_buy_or_wishlist(user, product)

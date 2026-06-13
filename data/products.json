@@ -4,7 +4,7 @@
         "name": "Nike shoes",
         "price": 120,
         "description": "",
-        "stock": 2,
+        "stock": 0,
         "category": "Shoes",
         "brand": "Nike",
         "is_featured": true,
