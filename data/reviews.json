@@ -10,5 +10,11 @@
         "product_id": 1,
         "rating": 5,
         "comment": "good"
+    },
+    {
+        "user": "Alpar",
+        "product_id": 1,
+        "rating": 5,
+        "comment": "great"
     }
 ]
